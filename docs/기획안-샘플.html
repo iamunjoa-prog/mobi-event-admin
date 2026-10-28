@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>수요 1+1 무비 쿠폰 기획안 (샘플)</title>
+<style>
+/* 모바일 B tv 이벤트 어드민 — 화면 스타일 */
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --line: #dfe2e8;
+  --line-soft: #eceef2;
+  --text: #1b1d21;
+  --text-dim: #6b7280;
+  --accent: #0b63ce;
+  --accent-soft: #e8f0fb;
+  --danger: #c0392b;
+  --ok: #1a7f4b;
+  --warn-bg: #fff6e0;
+  --warn-line: #e8c268;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.6 -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 600; }
+
+/* ---------- 상단 ---------- */
+
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-inner {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar h1 { font-size: 17px; }
+
+.storage {
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--accent-soft);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.storage.local { background: var(--line-soft); }
+
+main {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- 블록 ---------- */
+
+.block {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.block > h2 { font-size: 15px; }
+
+.lead {
+  margin: 6px 0 14px;
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* ---------- 유형 선택 ---------- */
+
+.type-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 10px;
+}
+
+.type-card {
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font: inherit;
+  color: inherit;
+}
+
+.type-card:hover { border-color: var(--accent); }
+
+.type-card.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.type-card strong { font-size: 14px; }
+.type-card span { font-size: 12px; color: var(--text-dim); }
+
+/* ---------- 편집 영역 ---------- */
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.editor-left > h2,
+.editor-right > h2 { font-size: 15px; margin-bottom: 12px; }
+
+.editor-right {
+  position: sticky;
+  top: 76px;
+}
+
+@media (max-width: 1100px) {
+  .editor-grid { grid-template-columns: 1fr; }
+  .editor-right { position: static; }
+}
+
+/* ---------- 폼 ---------- */
+
+.group {
+  border-top: 1px solid var(--line-soft);
+  padding: 16px 0;
+}
+
+.group:first-child { border-top: 0; padding-top: 0; }
+
+.group h3 {
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field.wide { grid-column: 1 / -1; }
+
+.field label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #35383e;
+}
+
+.req {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--danger);
+  background: #fdeceb;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.control {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 9px;
+  font: inherit;
+  background: #fff;
+  color: inherit;
+}
+
+.control:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(11, 99, 206, .12);
+}
+
+textarea.control { resize: vertical; min-height: 64px; }
+input[type="color"].control { height: 34px; padding: 3px; }
+
+.checks { display: flex; flex-wrap: wrap; gap: 6px 14px; padding-top: 3px; }
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.help { margin: 0; font-size: 11px; color: var(--text-dim); }
+.err { margin: 0; font-size: 11px; color: var(--danger); }
+
+.field.invalid .control { border-color: var(--danger); }
+
+/* ---------- 액션 ---------- */
+
+.actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+  flex-wrap: wrap;
+}
+
+button {
+  font: inherit;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+  border-radius: 6px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+
+button:hover { border-color: #b8bdc7; }
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+button.primary:hover { background: #0a55b0; }
+
+button.danger { color: var(--danger); }
+
+.msg { font-size: 12px; color: var(--text-dim); }
+.msg.ok { color: var(--ok); }
+.msg.error { color: var(--danger); }
+
+.warn {
+  margin: 0 0 14px;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-line);
+  border-radius: 6px;
+  padding: 9px 12px;
+  font-size: 13px;
+}
+
+.muted { color: var(--text-dim); font-size: 13px; }
+
+/* ---------- 탭 / 패널 ---------- */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+
+.tab {
+  border: 0;
+  background: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 18px 0 8px;
+}
+
+.panel-head:first-child { margin-top: 0; }
+.panel-head h3 { font-size: 13px; }
+.panel-head button { padding: 4px 10px; font-size: 12px; }
+
+.panel > h3 { font-size: 13px; margin: 18px 0 8px; }
+
+/* ---------- 기획안 표 ---------- */
+
+.plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+.plan-table th,
+.plan-table td {
+  border: 1px solid var(--line-soft);
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+  word-break: break-all;
+}
+
+.plan-table th {
+  width: 34%;
+  background: #fafbfc;
+  font-weight: 600;
+  color: #35383e;
+}
+
+.plan-table th.section {
+  width: auto;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.plan-table td { background: #fff; }
+
+/* ---------- 리스트 ---------- */
+
+.asset-list, .pkg-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.asset-list li {
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.asset-list code {
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.asset-list small { font-size: 11px; color: var(--text-dim); }
+
+.pkg-list li {
+  font-size: 12px;
+  background: #fafbfc;
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  padding: 7px 10px;
+  word-break: break-all;
+}
+
+.json {
+  margin: 0;
+  background: #1e2128;
+  color: #e4e7ec;
+  border-radius: 6px;
+  padding: 14px;
+  font-size: 12px;
+  line-height: 1.55;
+  overflow-x: auto;
+  max-height: 460px;
+}
+
+/* ---------- 저장 목록 ---------- */
+
+.history {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.history th,
+.history td {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 9px 10px;
+  text-align: left;
+}
+
+.history thead th {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 600;
+  border-bottom: 1px solid var(--line);
+}
+
+.history td.actions { white-space: nowrap; text-align: right; }
+.history td.actions button { padding: 4px 9px; font-size: 12px; margin-left: 4px; }
+
+/* ---------- 기획안 문서 ---------- */
+
+.panel-actions { display: flex; gap: 6px; }
+
+.plandoc-wrap {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.plandoc {
+  padding: 28px 30px 36px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.pd-head {
+  border-bottom: 2px solid var(--text);
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.pd-promo { margin: 0; font-size: 12px; color: var(--text-dim); }
+.pd-head h1 { margin: 2px 0 4px; font-size: 20px; }
+.pd-sub { margin: 0; font-size: 12px; color: var(--text-dim); }
+
+.pd-section { margin-bottom: 22px; }
+
+.pd-section h2 {
+  font-size: 13px;
+  padding: 5px 9px;
+  background: var(--line-soft);
+  border-left: 3px solid var(--accent);
+  margin-bottom: 10px;
+}
+
+.pd-sublabel {
+  margin: 12px 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+.pd-block + .pd-block { border-top: 1px dashed var(--line); padding-top: 4px; }
+.pd-block p { margin: 0 0 4px; }
+.pd-lead { font-size: 15px; font-weight: 600; }
+.pd-note { font-size: 11px; color: var(--text-dim); }
+
+.pd-btn {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+
+.pd-table, .pd-grid {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0;
+}
+
+.pd-table th, .pd-table td,
+.pd-grid th, .pd-grid td {
+  border: 1px solid var(--line);
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.pd-table thead th, .pd-grid th,
+.pd-table tfoot th {
+  background: var(--line-soft);
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.pd-meta th { width: 150px; background: var(--line-soft); font-weight: 600; }
+.pd-num { text-align: center; width: 110px; }
+.pd-mark { text-align: center; font-weight: 600; }
+
+.pd-list { margin: 4px 0; padding-left: 18px; }
+.pd-list li { margin-bottom: 2px; }
+
+.pd-consent {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.pd-consent h4 { margin: 0 0 6px; font-size: 12px; }
+.pd-consent p { margin: 0 0 4px; }
+.pd-agree { font-weight: 600; }
+.pd-empty { color: var(--text-dim); }
+
+/* ---------- 인쇄 ---------- */
+
+@media print {
+  body * { visibility: hidden; }
+  #planDoc, #planDoc * { visibility: visible; }
+
+  #planDoc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    border: 0;
+  }
+
+  .plandoc { padding: 0; font-size: 11pt; }
+  .pd-section { break-inside: avoid; }
+  .pd-consent { break-inside: avoid; }
+  .pd-table, .pd-grid { break-inside: auto; }
+  tr { break-inside: avoid; }
+
+  @page { margin: 14mm; }
+}
+
+
+/* 단독 파일로 열었을 때의 여백 */
+body { background: #f4f5f7; }
+#planDoc {
+  max-width: 900px;
+  margin: 24px auto;
+  max-height: none;
+}
+</style>
+</head>
+<body>
+<div id="planDoc" class="plandoc-wrap"><article class="plandoc">
+    <header class="pd-head">
+      <p class="pd-promo">2026년 11월 이벤트 프로모션</p>
+      <h1>수요 1+1 무비 쿠폰</h1>
+      <p class="pd-sub">11.4(수) ~ 11.25(수) · 수정 기획안(261028)</p>
+    </header>
+    <section class="pd-section" id="pd-meta">
+      <h2>기본 정보</h2>
+      <table class="pd-table pd-meta">
+    <tbody><tr><th>이벤트 유형</th><td>쿠폰 / 리워드 · 선착순쿠폰</td></tr><tr><th>이벤트 ID</th><td>NA0000000000</td></tr><tr><th>기간</th><td>2026-11-04 00:00:00 ~ 2026-11-25 23:59:59</td></tr><tr><th>노출 채널</th><td>인앱, 웹</td></tr><tr><th>기획 담당</th><td>김기획 / 마케팅</td></tr><tr><th>정책번호</th><td>A1PR0000000000000000</td></tr><tr><th>지급 수단</th><td>쿠폰 (SKBIFC001)</td></tr><tr><th>참여 가능 횟수</th><td>1</td></tr></tbody>
+  </table>
+    </section><section class="pd-section" id="pd-work">
+      <h2>작업 항목</h2>
+      <table class="pd-grid">
+    <tr><th>빅배너</th><th>이벤트배너</th><th>띠배너</th><th>상세</th><th>팝업</th><th>MMS</th><th>1단 메뉴카드</th><th>2단 메뉴카드</th></tr>
+    <tr><td class="pd-mark">o</td><td class="pd-mark">o</td><td class="pd-mark">-</td><td class="pd-mark">o</td><td class="pd-mark">o</td><td class="pd-mark">-</td><td class="pd-mark">o</td><td class="pd-mark">-</td></tr>
+  </table>
+    </section><section class="pd-section" id="pd-links">
+      <h2>링크</h2>
+      <table class="pd-table pd-meta">
+    <tbody><tr><th>딥링크</th><td><code>btvplus://my</code></td></tr><tr><th>로그 페이지 ID</th><td><code>/event/coupon</code></td></tr></tbody>
+  </table>
+    </section><section class="pd-section" id="pd-copy">
+      <h2>작업 요청서 — 노출 문구</h2>
+      <div class="pd-block">
+        <p class="pd-sublabel">메인 카피</p><p class="pd-lead">수요일엔 영화 한 편 값으로 두 편</p>
+      </div><div class="pd-block">
+        <p class="pd-sublabel">서브 카피</p><p>모바일 B tv에서 매주 수요일 쿠폰이 쏟아집니다</p><p>놓치면 다음 주까지 기다려야 해요!</p>
+      </div><div class="pd-block">
+        <p class="pd-sublabel">상세 본문</p><p>2026년 11월 모바일 B tv 이벤트<br>수요 1+1 무비 쿠폰<br>2026.11.4 (수) ~ 11.25 (수)</p><p>매주 수요일, 모바일 B tv에서 영화 할인 쿠폰을 드립니다.<br>한 편 값으로 두 편을 즐기세요.</p><p>쿠폰은 발급 후 14일간 사용할 수 있으며,<br>선착순 소진 시 조기 종료될 수 있습니다.</p>
+      </div><div class="pd-block">
+        <p class="pd-sublabel">참여 방법</p><ol><li>모바일 B tv 앱을 실행합니다</li><li>이벤트 페이지에서 쿠폰 받기 버튼을 누릅니다</li><li>MY &gt; 쿠폰함에서 발급된 쿠폰을 확인합니다</li></ol>
+      </div><div class="pd-block">
+        <p class="pd-sublabel">버튼</p><p><span class="pd-btn">20% 할인 쿠폰 다운로드</span> <code>coupon20</code></p>
+      </div><div class="pd-block">
+        <p class="pd-sublabel">주석</p><p class="pd-note">*쿠폰은 1인 1회, 이벤트 기간 중 매주 수요일에만 발급됩니다.</p><p class="pd-note">*모바일 B tv 미설치 고객은 다운로드 페이지로 연결됩니다.</p>
+      </div>
+    </section><section class="pd-section" id="pd-prize">
+      <h2>경품</h2>
+      <table class="pd-table">
+    <thead><tr><th>경품</th><th class="pd-num">당첨자수(명)</th></tr></thead>
+    <tbody><tr><td>20% 할인 쿠폰</td><td class="pd-num">1000</td></tr><tr><td>OK캐쉬백 1만P</td><td class="pd-num">50</td></tr><tr><td>SSG 상품권 1만원</td><td class="pd-num">50</td></tr></tbody>
+    <tfoot><tr><th>합계</th><th class="pd-num">1100</th></tr></tfoot>
+  </table><p class="pd-sublabel">당첨자 발표일: 2026-12-02</p>
+    </section><section class="pd-section" id="pd-popup">
+      <h2>팝업 문구</h2>
+      <table class="pd-table">
+    <thead><tr><th>상황</th><th>문구</th></tr></thead>
+    <tbody><tr><td>발급 성공</td><td>쿠폰이 발급되었습니다.</td></tr><tr><td>수량 소진</td><td>준비된 쿠폰이 모두 소진되었습니다. 다음 이벤트를 기대해주세요.</td></tr><tr><td>중복 참여</td><td>이미 쿠폰을 받으셨습니다. 다시 확인해주세요.</td></tr><tr><td>발급 실패</td><td>일시적 오류로 쿠폰이 발급되지 않았습니다.  다시 시도해주세요.</td></tr><tr><td>기간 오류</td><td>이벤트 시간을 확인해 주세요.</td></tr></tbody>
+  </table>
+    </section><section class="pd-section" id="pd-privacy">
+      <h2>개인정보 취합 사항</h2>
+      <div class="pd-consent">
+    <h4>&lt;수요 1+1 무비 쿠폰&gt; 개인정보 수집·이용 동의서</h4>
+    <p>&lt;수요 1+1 무비 쿠폰&gt; 와 관련하여, 본인의 개인정보를 SK브로드밴드가 수집 및 이용하는 것에 대해 동의합니다.</p>
+     <table class="pd-table">
+       <thead><tr><th>수집/이용 목적</th><th>수집 항목</th><th>보유기간</th></tr></thead>
+       <tbody><tr>
+         <td>본인 확인 및 응모 대상 검증, 이벤트 운영 및 당첨 경품 배송/지급 안내</td>
+         <td>이름, 주소, 휴대 전화번호</td><td>이벤트 경품 제공 후 1개월 보관 후 파기</td>
+       </tr></tbody>
+     </table>
+    <p class="pd-agree">ㅁ 동의</p>
+    <p class="pd-note">※ 본 동의는 이벤트 응모를 위한 개인 정보 수집/이용에 대한 동의로서, 동의를 거부할 권리가 있으나, 동의하지 않을 경우 이벤트에 응모하실 수 없습니다.</p><p class="pd-note">※ 법령에 따른 개인정보의 수집/이용, 계약의 이행·편의증진을 위한 개인정보 처리위탁 및 개인정보와 관련된 일반 사항은 서비스의 개인정보처리방침에 따릅니다.</p>
+  </div><div class="pd-consent">
+    <h4>&lt;수요 1+1 무비 쿠폰&gt; 개인정보 처리위탁 동의서</h4>
+    <p>&lt;수요 1+1 무비 쿠폰&gt; 와 관련하여, 본인의 개인정보처리 업무를 위탁합니다.</p>
+     <table class="pd-table">
+       <thead><tr><th>수탁사</th></tr></thead>
+       <tbody><tr><td>SK 엠앤서비스</td></tr></tbody>
+     </table>
+    <p class="pd-agree">ㅁ 동의</p>
+    <p class="pd-note">※ 본 동의는 이벤트 응모를 위한 개인정보 처리위탁에 대한 동의로서 동의를 거부할 권리가 있으나, 동의하지 않으실 경우 이벤트에 응모하실 수 없습니다.</p>
+  </div><div class="pd-consent">
+    <h4>&lt;수요 1+1 무비 쿠폰&gt; 개인정보 제3자 제공 동의서</h4>
+    <p>&lt;수요 1+1 무비 쿠폰&gt; 와 관련하여, 본인의 개인정보를 SK브로드밴드가 다음과 같이 제3자에게 제공하는 것에 동의합니다.</p>
+     <table class="pd-table">
+       <thead><tr><th>제공받는 자</th><th>제공 목적</th><th>보유 기간</th></tr></thead>
+       <tbody><tr><td>SK엠앤서비스(주), (주)SK플래닛</td><td>이벤트 진행 및 경품 배송</td><td>이벤트 경품 제공 후 1개월 보관 후 파기</td></tr></tbody>
+     </table>
+    <p class="pd-agree">ㅁ 동의</p>
+    <p class="pd-note">※ 이벤트 경품 제공을 위해 개인 정보가 제3자에게 제공됩니다. 개인 정보 제공을 거부하실 권리가 있으며, 거부 시 이벤트 참여가 제한됩니다.</p>
+  </div>
+    </section><section class="pd-section" id="pd-caution">
+      <h2>유의사항</h2>
+      <ul class="pd-list"><li>본 이벤트는 내부 사정에 의해 별도 고지 없이 이벤트 기간이 조정되거나 이벤트가 종료될 수 있습니다.</li><li>경품 수령을 위해 T 아이디 로그인 부탁 드립니다.</li><li>실물 경품의 경우 제세공과금은 당사 부담이며, 경품 배송 및 제세공과금 처리를 위해 개인 정보를 수집합니다.</li><li>포인트 경품은 제세공과금 제외 후 수령됩니다.</li><li>경품 지급 시점까지 B tv 회원이셔야 하며, 이벤트 기간 종료 시 기준으로 탈퇴 시 경품 지급이 불가합니다.</li></ul>
+    </section><section class="pd-section" id="pd-asset">
+      <h2>배너 에셋 · 퍼블 산출물</h2>
+      
+    <table class="pd-table">
+      <thead><tr><th>파일명</th><th>용도</th></tr></thead>
+      <tbody><tr><td><code>Home_BIg Banner_수요 1+1 무비 쿠폰.png</code></td><td>홈 빅배너 · 인앱</td></tr><tr><td><code>태블릿_bigbanner_수요 1+1 무비 쿠폰.png</code></td><td>태블릿 빅배너 · 인앱</td></tr><tr><td><code>Title Box_수요 1+1 무비 쿠폰.png</code></td><td>타이틀 박스 · 인앱, 웹</td></tr><tr><td><code>1.5단블록배너_수요 1+1 무비 쿠폰.png</code></td><td>블록배너. 1단으로 대체 가능 · 인앱</td></tr><tr><td><code>event_banner_수요 1+1 무비 쿠폰.png</code></td><td>이벤트 배너 · 인앱, 웹</td></tr><tr><td><code>Btv+_Contents_banner_수요 1+1 무비 쿠폰.png</code></td><td>B tv+ 전용. 해당 시에만 · 인앱</td></tr><tr><td><code>Btv+_Contents_banner_태블릿_수요 1+1 무비 쿠폰.png</code></td><td>B tv+ 전용 태블릿 · 인앱</td></tr><tr><td><code>banner_popup_수요 1+1 무비 쿠폰.png</code></td><td>팝업 배너. 필요 시 · 인앱</td></tr></tbody>
+    </table>
+    <p class="pd-sublabel">퍼블 산출물 zip</p>
+      <ul class="pd-list"><li><code>수요 1+1 무비 쿠폰(인앱)_261104.zip</code></li><li><code>수요 1+1 무비 쿠폰(웹)_261104.zip</code></li></ul>
+    </section>
+  </article></div>
+</body>
+</html>
